@@ -1,0 +1,14 @@
+// src/modules/teacher/teacher.module.ts
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Teacher } from './teacher.entity';
+import { TeacherService } from './teacher.service';
+import { TeacherController } from './teacher.controller';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Teacher])],
+  providers: [TeacherService],
+  controllers: [TeacherController],
+  exports: [TeacherService],
+})
+export class TeacherModule {}
