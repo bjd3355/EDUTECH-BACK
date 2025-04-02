@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CoursService } from './cours.service';
 import { Cours } from './cours.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 
 @Controller('cours')
@@ -17,8 +18,15 @@ export class CoursController {
         return await this.coursService.findCours(id)
     }
 
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+    uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+    }
+
     @Post()
-    async newCours(@Body('cours') cours:Cours):Promise<Cours>{
+    @UseInterceptors(FileInterceptor('imageCours'))
+    async newCours(@Body('cours') cours:Cours, @UploadedFile() file: Express.Multer.File):Promise<Cours>{
         return await this.coursService.createCours(cours);
     }
 

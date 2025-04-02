@@ -24,4 +24,7 @@ export class Cours{
     @Column()
     professeur:string;
 
+    @Column()
+    photo:string;
+
 }

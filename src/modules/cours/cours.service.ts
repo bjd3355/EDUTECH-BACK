@@ -23,8 +23,12 @@ export class CoursService{
         return cours;
     }
 
-    async createCours(cours:Partial<Cours>):Promise<Cours>{
-        const nouveauCours = await this.coursRepository.create(cours);
+    async createCours(cours:Partial<Cours>, file?:Express.Multer.File):Promise<Cours>{
+        const nouveauCours = await this.coursRepository.create({
+            ...cours,
+            photo:file?.filename,
+        });
+        
         return this.coursRepository.save(nouveauCours);
     }
 
