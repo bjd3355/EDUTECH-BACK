@@ -1,0 +1,71 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StudentService = void 0;
+const common_1 = require("@nestjs/common");
+const typeorm_1 = require("typeorm");
+const student_entity_1 = require("./student.entity");
+const typeorm_2 = require("@nestjs/typeorm");
+let StudentService = class StudentService {
+    studentRepo;
+    constructor(studentRepo) {
+        this.studentRepo = studentRepo;
+    }
+    async create(dto) {
+        if (!dto.userId) {
+            throw new Error("L'id de l'utilisateur est requis pour créer un étudiant");
+        }
+        const student = this.studentRepo.create({
+            id: dto.userId,
+            nom: dto.nom,
+            prenom: dto.prenom,
+            email: dto.email,
+            password: dto.password,
+            classe: dto.classe,
+            niveau: dto.niveau,
+            telephone: dto.telephone,
+            adresse: dto.adresse,
+            dateNaissance: dto.dateNaissance,
+            photo: dto.photo,
+            genre: dto.genre,
+        });
+        return this.studentRepo.save(student);
+    }
+    async findAll() {
+        return this.studentRepo.find();
+    }
+    async findOne(id) {
+        const student = await this.studentRepo.findOne({ where: { id } });
+        if (!student) {
+            throw new common_1.NotFoundException(`Student #${id} not found`);
+        }
+        return student;
+    }
+    async update(id, dto) {
+        const student = await this.findOne(id);
+        Object.assign(student, dto);
+        return this.studentRepo.save(student);
+    }
+    async remove(id) {
+        const student = await this.findOne(id);
+        await this.studentRepo.remove(student);
+    }
+};
+exports.StudentService = StudentService;
+exports.StudentService = StudentService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_2.InjectRepository)(student_entity_1.Student)),
+    __metadata("design:paramtypes", [typeorm_1.Repository])
+], StudentService);
+//# sourceMappingURL=student.service.js.map
